@@ -23,4 +23,4 @@ async def pull_changes(request: Request, x_hub_signature_256: Annotated[str | No
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8092)

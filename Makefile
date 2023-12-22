@@ -8,6 +8,6 @@ build:
 .PHONY: run
 run:
 	docker run -it \
-		-v $(shell pwd)/settings.ini:/code/settings.ini:ro \
+		-v $(shell pwd)/settings.ini:/src/settings.ini:ro \
 		-p 8092:8092 \
 		$(CONTAINER_NAME)

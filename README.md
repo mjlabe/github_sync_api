@@ -22,7 +22,5 @@ Run the following command to start the repo:
 docker run -it \
 	-v $(shell pwd)/settings.ini:/code/settings.ini:ro \
 	-p 8092:8092 \
-	$(CONTAINER_NAME)
+	github-sync-api:latest
 ```
-
-

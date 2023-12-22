@@ -10,6 +10,6 @@ COPY requirements.txt /code/
 
 RUN pip install -r requirements.txt
 
-COPY . /code/
+COPY main.py verify_signature.py settings.py /code/
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8092"]

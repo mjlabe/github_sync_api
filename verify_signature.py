@@ -1,8 +1,9 @@
 import hashlib
 import hmac
-import os
 
 from fastapi import HTTPException, Request
+
+from settings import settings
 
 
 async def verify_signature(request: Request):
@@ -21,7 +22,7 @@ async def verify_signature(request: Request):
         raise HTTPException(status_code=403, detail="x-hub-signature-256 header is missing!")
 
     hash_object = hmac.new(
-        os.environ.get("GITHUB_SECRET_TOKEN").encode('utf-8'),
+        settings["secrets"]["GITHUB_SECRET_TOKEN"].encode('utf-8'),
         msg=payload_body,
         digestmod=hashlib.sha256)
 

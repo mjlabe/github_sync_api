@@ -18,13 +18,14 @@ async def pull_changes(request: Request, repo: str):
 
     repo = settings["repos"].get(repo)
     if not repo:
-        raise HTTPException(
-            detail="Repo is not defined in settings",
-            status_code=404
-        )
+        raise HTTPException(detail="Repo is not defined in settings", status_code=404)
 
-    fetch = subprocess.run(["git", "fetch"], cwd=os.environ.get(repo), capture_output=True, text=True)
-    pull = subprocess.run(["git", "pull"], cwd=os.environ.get(repo), capture_output=True, text=True)
+    fetch = subprocess.run(
+        ["git", "fetch"], cwd=os.environ.get(repo), capture_output=True, text=True
+    )
+    pull = subprocess.run(
+        ["git", "pull"], cwd=os.environ.get(repo), capture_output=True, text=True
+    )
 
     return {"message": {"fetch": fetch, "pull": pull}}
 

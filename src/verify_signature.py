@@ -19,12 +19,15 @@ async def verify_signature(request: Request):
     payload_body = await request.body()
 
     if not signature_header:
-        raise HTTPException(status_code=403, detail="x-hub-signature-256 header is missing!")
+        raise HTTPException(
+            status_code=403, detail="x-hub-signature-256 header is missing!"
+        )
 
     hash_object = hmac.new(
-        settings["secrets"]["GITHUB_SECRET_TOKEN"].encode('utf-8'),
+        settings["secrets"]["token"].encode("utf-8"),
         msg=payload_body,
-        digestmod=hashlib.sha256)
+        digestmod=hashlib.sha256,
+    )
 
     expected_signature = "sha256=" + hash_object.hexdigest()
 

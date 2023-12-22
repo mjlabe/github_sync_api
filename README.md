@@ -20,9 +20,9 @@ Run the following command to start the repo:
 
 ```shell
 docker run -it \
-		-v $(shell pwd)/settings.ini:/code/settings.ini:ro \
-		-p 8092:8092 \
-		$(CONTAINER_NAME)
+	-v $(shell pwd)/settings.ini:/code/settings.ini:ro \
+	-p 8092:8092 \
+	$(CONTAINER_NAME)
 ```
 
 

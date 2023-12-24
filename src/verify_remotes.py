@@ -45,16 +45,15 @@ def verify_fingerprint():
         with open("/root/.ssh/known_hosts", "r+") as known_hosts:
             hosts = ""
             for key in response.json().get("ssh_keys"):
-                hosts += f"{key}\n"
+                hosts += f"github.com {key}\n"
             current_host_keys = known_hosts.read()
             known_hosts.seek(0)
 
             if not current_host_keys:
                 print("GitHub fingerprints not setup. Updating.")
-                known_hosts.truncate()
                 known_hosts.write(hosts)
 
-            elif hosts and hosts != current_host_keys:
-                print("GitHub fingerprints have changed. Updating.")
-                known_hosts.truncate()
+            elif hosts and hosts not in current_host_keys:
+                print("WARNING: GitHub fingerprints have changed. Please verify fingerprints. Auto updating.")
                 known_hosts.write(hosts)
+                known_hosts.truncate()

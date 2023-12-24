@@ -5,6 +5,12 @@ build:
 	docker build \
 	-t $(CONTAINER_NAME) .
 
+.PHONY: buildnc
+buildnc:
+	docker build \
+	--no-cache \
+	-t $(CONTAINER_NAME) .
+
 .PHONY: run
 run:
 	docker run -it \

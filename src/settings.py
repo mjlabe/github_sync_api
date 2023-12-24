@@ -5,9 +5,6 @@ from configparser import ConfigParser
 parser = ConfigParser()
 parser.read("settings.ini")
 
-print("REPOS", os.listdir("/repos"))
-print("SRC", os.listdir("/src"))
-
 settings = {section: dict(parser.items(section)) for section in parser.sections()}
 
 if not settings.get("repos"):

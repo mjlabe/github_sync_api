@@ -1,4 +1,4 @@
-FROM python:3.10-slim-buster
+FROM python:3.11-slim-buster
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -8,6 +8,7 @@ RUN apt-get -y update
 RUN apt-get -y install git
 
 RUN mkdir -p /root/.ssh && \
+    touch /root/.ssh/known_hosts && \
     chmod 0700 /root/.ssh
 
 WORKDIR /src

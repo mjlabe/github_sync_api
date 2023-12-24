@@ -1,0 +1,12 @@
+version: '3.5'
+
+services:
+  web:
+    image: github-sync-api:latest
+    volumes:
+      - ~/.ssh/id_ed25519:/root/.ssh/id_ed25519
+      - ~/.ssh/id_ed25519.pub:/root/.ssh/id_ed25519.pub
+      - ~/Projects/gclfs/:/repos/gclfs/
+      - ~/Projects/misc/github_sync_api/settings.ini:/src/settings.ini:ro
+    ports:
+      - "8092:8092"

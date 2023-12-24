@@ -1,0 +1,12 @@
+version: '3.5'
+
+services:
+  web:
+    image: mjlabe/github-sync-api:latest
+    volumes:
+      - ~/.ssh/id_ed25519:/root/.ssh/id_ed25519
+      - ~/path/to/your_projects/github_sync_api/settings.ini:/src/settings.ini:ro
+      - ~/path/to/your_repo/:/repos/your_repo/
+      - ~/path/to/your_other_repo//:/repos/your_other_repo/
+    ports:
+      - "8092:8092"

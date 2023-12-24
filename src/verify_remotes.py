@@ -1,5 +1,9 @@
 import hashlib
 import hmac
+import os
+from distutils.util import strtobool
+
+import requests
 
 from fastapi import HTTPException, Request
 
@@ -33,3 +37,23 @@ async def verify_signature(request: Request):
 
     if not hmac.compare_digest(expected_signature, signature_header):
         raise HTTPException(status_code=403, detail="Request signatures didn't match!")
+
+
+def verify_fingerprint():
+    if strtobool(os.environ.get("AUTO_UPDATE_FINGERPRINT", "True")):
+        response = requests.get("https://api.github.com/meta")
+        with open("/root/.ssh/known_hosts", "r+") as known_hosts:
+            hosts = ""
+            for key in response.json().get("ssh_keys"):
+                hosts += f"github.com {key}\n"
+            current_host_keys = known_hosts.read()
+            known_hosts.seek(0)
+
+            if not current_host_keys:
+                print("GitHub fingerprints not setup. Updating.")
+                known_hosts.write(hosts)
+
+            elif hosts and hosts not in current_host_keys:
+                print("WARNING: GitHub fingerprints have changed. Please verify fingerprints. Auto updating.")
+                known_hosts.write(hosts)
+                known_hosts.truncate()

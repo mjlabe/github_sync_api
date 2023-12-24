@@ -14,7 +14,7 @@ app = FastAPI()
 @app.post("/{repo}/pull")
 async def pull_changes(request: Request, repo: str):
     # verify request comes from GitHub webhook
-    # await verify_signature(request)
+    await verify_signature(request)
 
     # verify GitHub fingerprints are up-to-date
     verify_fingerprint()

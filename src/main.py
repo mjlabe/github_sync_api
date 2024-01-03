@@ -1,6 +1,8 @@
 import os
 import subprocess
 
+import logging
+
 import uvicorn
 from fastapi import FastAPI, Request, HTTPException
 
@@ -13,6 +15,7 @@ app = FastAPI()
 
 @app.post("/{repo}/pull")
 async def pull_changes(request: Request, repo: str):
+    logging.info(f"Client {request.client.host} requested pulling changes for repo '{repo}'")
     # verify request comes from GitHub webhook
     await verify_signature(request)
 
@@ -22,6 +25,7 @@ async def pull_changes(request: Request, repo: str):
     repo = settings["repos"].get(repo)
 
     if not repo:
+        logging.warning(f"Repo {repo} is not defined in settings")
         raise HTTPException(detail="Repo is not defined in settings", status_code=404)
 
     fetch = subprocess.run(
@@ -31,6 +35,7 @@ async def pull_changes(request: Request, repo: str):
         ["git", "pull"], cwd=repo, capture_output=True, text=True
     )
 
+    logging.info(str({"message": {"fetch": fetch, "pull": pull}}))
     return {"message": {"fetch": fetch, "pull": pull}}
 
 

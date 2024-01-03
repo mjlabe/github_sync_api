@@ -1,5 +1,6 @@
 import hashlib
 import hmac
+import logging
 import os
 from distutils.util import strtobool
 
@@ -23,6 +24,7 @@ async def verify_signature(request: Request):
     payload_body = await request.body()
 
     if not signature_header:
+        logging.error("'x-hub-signature-256' header is missing.")
         raise HTTPException(
             status_code=403, detail="x-hub-signature-256 header is missing!"
         )
@@ -36,6 +38,7 @@ async def verify_signature(request: Request):
     expected_signature = "sha256=" + hash_object.hexdigest()
 
     if not hmac.compare_digest(expected_signature, signature_header):
+        logging.error("GitHub signature didn't match.")
         raise HTTPException(status_code=403, detail="Request signatures didn't match!")
 
 
@@ -50,10 +53,10 @@ def verify_fingerprint():
             known_hosts.seek(0)
 
             if not current_host_keys:
-                print("GitHub fingerprints not setup. Updating.")
+                logging.warning("GitHub fingerprints not setup. Updating.")
                 known_hosts.write(hosts)
 
             elif hosts and hosts not in current_host_keys:
-                print("WARNING: GitHub fingerprints have changed. Please verify fingerprints. Auto updating.")
+                logging.warning("GitHub fingerprints have changed. Please verify fingerprints. Auto updating.")
                 known_hosts.write(hosts)
                 known_hosts.truncate()

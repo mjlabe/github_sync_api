@@ -166,3 +166,4 @@ cython_debug/
 /settings.ini
 /known_hosts
 /docker-compose.yaml
+log.txt

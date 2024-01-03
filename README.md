@@ -16,9 +16,15 @@ some_repo=/path/to/some_repo
 some_other_repo=/path/to/some_other_repo
 [secrets]
 token=your_github_webhook_token
+[environment]
+log_level=INFO
+log_to_file=true
 ```
 
-If you prefer, you can use the `TOKEN` environment variable for the token.
+If you prefer, you can use environment variables:
+- `TOKEN` for the token
+- `LOG_LEVEL` for the log level (defaults to `ERROR`)
+- `LOG_TO_FILE` logs to file when `true`
 
 Run the following command to start the app:
 

@@ -1,4 +1,4 @@
-CONTAINER_NAME:=github-sync-api
+CONTAINER_NAME:=github_sync_api
 
 .PHONY: build
 build:
@@ -17,6 +17,10 @@ run:
 		-v $(shell pwd)/settings.ini:/src/settings.ini:ro \
 		-p 8092:8092 \
 		$(CONTAINER_NAME)
+
+.PHONY: up
+up:
+	docker compose up
 
 .PHONY: up
 up:

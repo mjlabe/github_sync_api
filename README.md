@@ -24,7 +24,7 @@ Run the following command to start the app:
 
 ```shell
 docker run -it \
-	-v $(shell pwd)/settings.ini:/code/settings.ini:ro \
+	-v $(shell pwd)/settings.ini:/src/settings.ini:ro \
 	-p 8092:8092 \
 	github-sync-api:latest
 ```
@@ -34,7 +34,7 @@ Be sure to mount the volumes your repos reside in and your ssh key:
 ```shell
 docker run -it \
 	-v $(HOME)/.ssh/your_github_ssh_key:/root/.ssh/your_github_ssh_key
-	-v $(shell pwd)/settings.ini:/code/settings.ini:ro \
+	-v $(shell pwd)/settings.ini:/src/settings.ini:ro \
 	-v /my/project/directory/some_repo/:/path/to/some_repo/ \
 	-v /my/project/directory/some_other_repo/:/path/to/some_other_repo/ \
 	-p 8092:8092 \

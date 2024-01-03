@@ -32,7 +32,7 @@ Run the following command to start the app:
 docker run -it \
 	-v $(shell pwd)/settings.ini:/src/settings.ini:ro \
 	-p 8092:8092 \
-	github-sync-api:latest
+	mjlabe/github_sync_api:latest
 ```
 
 Be sure to mount the volumes your repos reside in and your ssh key:
@@ -44,10 +44,10 @@ docker run -it \
 	-v /my/project/directory/some_repo/:/path/to/some_repo/ \
 	-v /my/project/directory/some_other_repo/:/path/to/some_other_repo/ \
 	-p 8092:8092 \
-	github-sync-api:latest
+	mjlabe/github_sync_api:latest
 ```
 
-Alternatively, you can use `docker compose` like the [example](example/docker-compose.yaml).
+Alternatively, you can use `docker compose` like this [example](example/docker-compose.yaml).
 
 > WARNING: By default, the container checks for updated GitHub fingerprints from https://api.github.com/meta and updates 
 > them in `known_hosts` automatically. If you find this too insecure, set the environment variable

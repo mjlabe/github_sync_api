@@ -1,7 +1,9 @@
-import os
 import subprocess
 
 import logging
+from json import JSONDecodeError
+
+import requests
 
 import uvicorn
 from fastapi import FastAPI, Request, HTTPException
@@ -78,6 +80,34 @@ async def pull_changes(request: Request, repo: str):
 
     logging.info(str({"message": {"pre-run": pre_run, "fetch": fetch, "pull": pull, "post_run": post_run}}))
     return {"message": {"pre-run": pre_run, "fetch": fetch, "pull": pull, "post_run": post_run}}
+
+
+@app.post("/webhook/")
+@verify
+async def pull_changes(request: Request, webhook: str):
+    logging.info(f"Client {request.client.host} sent webhook for repo '{webhook}'")
+
+    url = settings["webhooks"].get(webhook)
+
+    if not url:
+        logging.warning(f"Webhook {url} is not defined in settings")
+        raise HTTPException(detail="Webhook is not defined in settings", status_code=404)
+
+    try:
+        json = await request.json()
+    except JSONDecodeError:
+        json = {}
+
+    try:
+        result = requests.post(url, headers=request.headers, json=json)
+
+        if int(result.status_code) > 300:
+            raise HTTPException(detail="Down stream service returned an error", status_code=result.status_code)
+
+        return {"message": {"detail": result.json(), "status": result.status_code, }}
+
+    except requests.exceptions.ConnectionError:
+        raise HTTPException(detail="Unable to reach down stream service", status_code=500)
 
 
 if __name__ == "__main__":

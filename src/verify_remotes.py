@@ -1,3 +1,4 @@
+from functools import wraps
 import hashlib
 import hmac
 import logging
@@ -12,14 +13,6 @@ from settings import settings
 
 
 async def verify_signature(request: Request):
-    """Verify that the payload was sent from GitHub by validating SHA256.
-
-    Raise and return 403 if not authorized.
-
-    Args:
-        request: request to get body to verify (request.body()) and header received from GitHub (x-hub-signature-256)
-    """
-
     signature_header = request.headers.get("x-hub-signature-256")
     payload_body = await request.body()
 
@@ -60,3 +53,31 @@ def verify_fingerprint():
                 logging.warning("GitHub fingerprints have changed. Please verify fingerprints. Auto updating.")
                 known_hosts.write(hosts)
                 known_hosts.truncate()
+
+
+def verify(func):
+    """Verify that the payload was sent from GitHub by validating SHA256.
+
+    Raise and return 403 if not authorized.
+
+    Args:
+        request: request to get body to verify (request.body()) and header received from GitHub (x-hub-signature-256)
+    """
+
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        """Verify that the payload was sent from GitHub by validating SHA256.
+
+        Raise and return 403 if not authorized.
+
+        Args:
+            request: request to get body to verify (request.body()) and header received from GitHub (x-hub-signature-256)
+        """
+
+        await verify_signature(kwargs.get('request'))
+
+        verify_fingerprint()
+
+        return await func(*args, **kwargs)
+
+    return wrapper

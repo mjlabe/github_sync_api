@@ -167,3 +167,4 @@ cython_debug/
 /known_hosts
 /docker-compose.yaml
 log.txt
+restart.sh

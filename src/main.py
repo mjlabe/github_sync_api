@@ -101,7 +101,7 @@ async def pull_changes(request: Request, webhook: str):
     try:
         result = requests.post(url, headers=request.headers, json=json)
 
-        if int(result.status_code) > 300:
+        if int(result.status_code) >= 300:
             raise HTTPException(detail="Down stream service returned an error", status_code=result.status_code)
 
         return {"message": {"detail": result.json(), "status": result.status_code, }}

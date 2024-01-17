@@ -14,12 +14,16 @@ The repos the API should manage are defined in `settings.ini`.
 [repos]
 some_repo=/path/to/some_repo
 some_other_repo=/path/to/some_other_repo
+[webhooks]
+some_api=https://some.url.for/webhook
 [secrets]
 token=your_github_webhook_token
 [environment]
 log_level=INFO
 log_to_file=true
 ```
+
+The webhook endpoint passes all received headers and data along to the subsequent request
 
 If you prefer, you can use environment variables:
 - `TOKEN` for the token
